@@ -1,8 +1,13 @@
-<!-- <template name="user">
-    <li class="user">
-        <span class="text"><strong>{{username}}</strong> - {{text}}</span>
-        <label for="ban">Ban/Unban user.
-            <input id="ban" type="checkbox" checked="{{isBanned}}" class="toggle-checked" />
-        </label>
+<template name="user">
+    <li class="user {{#if isBanned}}banned{{/if}}">
+        <span class="text"><strong>{{username}}</strong> - {{email}}</span>
+        <span class="text">{{createdAt}}</span>
+        <button class="toggle-ban">
+            {{#if isBanned}}
+            Unban
+            {{else}}
+            Ban
+            {{/if}}
+        </button>
     </li>
-</template> -->
+</template>

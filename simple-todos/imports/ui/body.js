@@ -46,4 +46,9 @@ Template.body.events({
     'change .hide-completed input'(event, instance) {
         instance.state.set('hideCompleted', event.target.checked);
     },
+
+    'click .loadmore-btn'(event, instance) {
+        Meteor.call('tasks.loadmore')
+        // instance.state.set('loadMoreTasks', event.target.checked);
+    },
 });

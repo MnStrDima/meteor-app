@@ -26,7 +26,7 @@ dev-error-overlay@0.1.0
 reactive-dict@1.3.0
 accounts-ui@1.3.2
 accounts-password@1.7.0
-accounts-google@1.3.3
 meteortesting:mocha
 kadira:flow-router
 kadira:blaze-layout
+arillo:flow-router-helpers
