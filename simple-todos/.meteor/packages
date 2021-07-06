@@ -28,4 +28,5 @@ accounts-ui@1.3.2
 accounts-password@1.7.0
 accounts-google@1.3.3
 meteortesting:mocha
-iron:router
+kadira:flow-router
+kadira:blaze-layout

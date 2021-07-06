@@ -1,4 +1,4 @@
-<body>
+<template name="MainLayout">
     <div class="container">
         <header>
             <a href="/users">Users List</a>
@@ -25,4 +25,7 @@
         </ul>
 
     </div>
-</body>
+    <main>
+        {{> Template.dynamic template=main}}
+    </main>
+</template>
