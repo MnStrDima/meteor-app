@@ -25,6 +25,7 @@ Template.body.helpers({
     incompleteCount() {
         return Tasks.find({ checked: { $ne: true } }).count();
     },
+
 });
 
 Template.body.events({

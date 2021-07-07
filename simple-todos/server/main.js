@@ -19,6 +19,13 @@ Meteor.startup(() => {
   };
 });
 
-// Meteor.publish('usersList', function () {
-//   return Meteor.users.find({});
-// });
+Accounts.config({
+  defaultFieldSelector: {
+    username: 1,
+    emails: 1,
+    createdAt: 1,
+    isBanned: 1,
+    profile: 1,
+    services: 1
+  }
+});
