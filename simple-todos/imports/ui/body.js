@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { ReactiveDict } from 'meteor/reactive-dict';
+import { ReactiveVar } from 'meteor/reactive-var';
 
 import { Tasks } from '../api/tasks';
 
@@ -10,17 +11,32 @@ import './body.html';
 Template.body.onCreated(function bodyOnCreated() {
     this.state = new ReactiveDict();
     Meteor.subscribe('tasks');
+
+    const instance = this;
+    instance.loaded = new ReactiveVar(0);
+    instance.limit = new ReactiveVar(2);
+    instance.autorun(function () {
+        let limit = instance.limit.get();
+        let subscription = instance.subscribe('tasks', limit);
+        if (subscription.ready()) {
+            instance.loaded.set(limit);
+        }
+    });
+    instance.allTasks = function () {
+        return Tasks.find({}, { sort: { createdAt: -1 }, limit: instance.loaded.get() });
+    }
+    instance.incompleteTasks = function () {
+        return Tasks.find({ checked: { $ne: true } }, { sort: { createdAt: -1 }, limit: instance.loaded.get() });
+    }
 });
 
 Template.body.helpers({
     tasks() {
         const instance = Template.instance();
         if (instance.state.get('hideCompleted')) {
-            // If hide completed is checked, filter tasks
-            return Tasks.find({ checked: { $ne: true } }, { sort: { createdAt: -1 } });
+            return instance.incompleteTasks();
         }
-        // Otherwise, return all of the tasks
-        return Tasks.find({}, { sort: { createdAt: -1 } });
+        return instance.allTasks();
     },
     incompleteCount() {
         return Tasks.find({ checked: { $ne: true } }).count();
@@ -49,7 +65,9 @@ Template.body.events({
     },
 
     'click .loadmore-btn'(event, instance) {
-        Meteor.call('tasks.loadmore')
-        // instance.state.set('loadMoreTasks', event.target.checked);
+        event.preventDefault();
+        let limit = instance.limit.get();
+        limit += 2;
+        instance.limit.set(limit);
     },
 });
