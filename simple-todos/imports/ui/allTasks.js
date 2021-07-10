@@ -6,9 +6,9 @@ import { ReactiveVar } from 'meteor/reactive-var';
 import { Tasks } from '../api/tasks';
 
 import './task.js';
-import './body.html';
+import './allTasks.html';
 
-Template.body.onCreated(function bodyOnCreated() {
+Template.allTasks.onCreated(function allTasksOnCreated() {
     this.state = new ReactiveDict();
     Meteor.subscribe('tasks');
 
@@ -28,9 +28,12 @@ Template.body.onCreated(function bodyOnCreated() {
     instance.incompleteTasks = function () {
         return Tasks.find({ checked: { $ne: true } }, { sort: { createdAt: -1 }, limit: instance.loaded.get() });
     }
+    instance.hasMoreTasks = function () {
+        return Template.instance().allTasks().count() >= Template.instance().limit.get();
+    }
 });
 
-Template.body.helpers({
+Template.allTasks.helpers({
     tasks() {
         const instance = Template.instance();
         if (instance.state.get('hideCompleted')) {
@@ -41,10 +44,14 @@ Template.body.helpers({
     incompleteCount() {
         return Tasks.find({ checked: { $ne: true } }).count();
     },
+    hasMoreTasks: function () {
+        let hasMoreTasks = Template.instance().hasMoreTasks();
+        return (hasMoreTasks) ? {} : { disabled: 'disabled' };
+    }
 
 });
 
-Template.body.events({
+Template.allTasks.events({
     'submit .new-task'(event) {
         // Prevent default browser form submit
         event.preventDefault();

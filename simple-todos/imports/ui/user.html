@@ -1,7 +1,8 @@
 <template name="user">
     <li class="user {{#if isBanned}}banned{{/if}}">
-        <span class="text"><strong>{{username}}</strong> - {{email}}</span>
-        <span class="text">{{createdAt}}</span>
+        <p class="text"><strong>Username: {{username}}</strong></p>
+        <p class="text">Email: {{email}}</p>
+        <p class="text">Created: {{createdAt}}</p>
         <button class="toggle-ban">
             {{#if isBanned}}
             Unban

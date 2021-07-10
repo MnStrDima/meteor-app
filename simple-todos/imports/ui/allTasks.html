@@ -1,4 +1,4 @@
-<body>
+<template name="allTasks">
     <div class="container">
         <header>
             <a href="{{pathFor route='/users'}}">Users List</a>
@@ -24,7 +24,7 @@
             {{/each}}
         </ul>
 
-        <button class="loadmore-btn">Load more tasks</button>
+        <button class="loadmore-btn" {{hasMoreTasks}}>Load more tasks</button>
 
     </div>
-</body>
+</template>

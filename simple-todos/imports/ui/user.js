@@ -7,8 +7,13 @@ import './user.html';
 
 Template.user.helpers({
     isBanned() {
-        return this.owner === Meteor.userId();
+        // return this.owner === Meteor.userId();
+        console.log(this.isBanned);
+        return this.isBanned;
     },
+    email() {
+        return this.emails[0].address;
+    }
 });
 
 Template.user.events({

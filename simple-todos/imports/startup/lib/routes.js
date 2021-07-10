@@ -1,13 +1,13 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { BlazeLayout } from 'meteor/kadira:blaze-layout';
 
-import '../../ui/body.js';
+import '../../ui/allTasks.js';
 import '../../ui/usersList.js'
 
 FlowRouter.route('/', {
     name: "home",
     action() {
-        BlazeLayout.render('body');
+        BlazeLayout.render('allTasks');
     },
 });
 
