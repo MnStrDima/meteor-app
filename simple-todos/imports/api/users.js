@@ -1,77 +1,32 @@
 import { Meteor } from 'meteor/meteor';
-import { Mongo } from 'meteor/mongo';
 import { check } from 'meteor/check';
 
-// export const Users = Meteor.users;
-
 if (Meteor.isServer) {
-    // Meteor.publish('allUsers', function tasksPublication(limit) {
-    //     return Users.find({}, { sort: { createdAt: -1 }, limit: limit });
-    // });
     Meteor.publish('allUsers', function tasksPublication(limit) {
-        if (this.userId) {
-            return Meteor.users.find({ _id: this.userId }, {
-                fields: { emails: 1, username: 1, createdAt: 1, 'profile.isBanned': 1 }, sort: { createdAt: -1 }, limit: limit
-            });
+        return Meteor.users.find({}, {
+            fields: { emails: 1, username: 1, createdAt: 1, isBanned: 1 }, sort: { createdAt: -1 }, limit: limit
+        });
+    });
+
+    Accounts.validateLoginAttempt(function (options) {
+        const user = options.user;
+        if (user.isBanned) {
+            throw new Meteor.Error(403, "You are banned!");
         } else {
-            this.ready();
+            return true;
         }
     });
 }
 
-
-
-
 Meteor.methods({
-    'allUsers.insert'(text) {
-        check(text, String);
+    'allUsers.setIsBanned'(userId, setIsBanned) {
+        check(userId, String);
+        check(setIsBanned, Boolean);
 
-        // Make sure the user is logged in before inserting a task
         if (!this.userId) {
             throw new Meteor.Error('not-authorized');
         }
 
-        Tasks.insert({
-            text,
-            createdAt: new Date(),
-            owner: this.userId,
-            username: Meteor.users.findOne(this.userId).username,
-        });
-    },
-    'allUsers.remove'(taskId) {
-        check(taskId, String);
-
-        const task = Tasks.findOne(taskId);
-        if (task.private && task.owner !== this.userId) {
-            // If the task is private, make sure only the owner can delete it
-            throw new Meteor.Error('not-authorized');
-        }
-
-        Tasks.remove(taskId);
-    },
-    'allUsers.setChecked'(taskId, setChecked) {
-        check(taskId, String);
-        check(setChecked, Boolean);
-
-        const task = Tasks.findOne(taskId);
-        if (task.private && task.owner !== this.userId) {
-            // If the task is private, make sure only the owner can check it off
-            throw new Meteor.Error('not-authorized');
-        }
-
-        Tasks.update(taskId, { $set: { checked: setChecked } });
-    },
-    'allUsers.setPrivate'(taskId, setToPrivate) {
-        check(taskId, String);
-        check(setToPrivate, Boolean);
-
-        const task = Tasks.findOne(taskId);
-
-        // Make sure only the task owner can make a task private
-        if (task.owner !== this.userId) {
-            throw new Meteor.Error('not-authorized');
-        }
-
-        Tasks.update(taskId, { $set: { private: setToPrivate } });
-    },
+        Meteor.users.update(userId, { $set: { isBanned: setIsBanned } });
+    }
 });

@@ -8,6 +8,12 @@ import { ReactiveVar } from 'meteor/reactive-var';
 import './usersList.html';
 import './user.js';
 
+if (Meteor.isClient) {
+    Accounts.onLoginFailure(function (error) {
+        console.log(error.error.reason);
+    })
+}
+
 Template.usersList.onCreated(function usersListOnCreated() {
     this.state = new ReactiveDict();
     Meteor.subscribe('allUsers');
@@ -33,7 +39,6 @@ Template.usersList.onCreated(function usersListOnCreated() {
 Template.usersList.helpers({
     users() {
         const instance = Template.instance();
-        Meteor.users.find().forEach(user => { console.log(user) })
         return instance.allUsers();
     },
     usersCount() {

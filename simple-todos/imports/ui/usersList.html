@@ -1,8 +1,12 @@
 <template name="usersList">
     <div class="container">
         <header>
-            <a href="{{pathFor route='home'}}">Home</a>
-            <h1>Users List ({{usersCount}})</h1>
+            <div class="header-router">
+                <a href="{{pathFor route='home'}}">Home</a>
+            </div>
+            <div class="header-filling">
+                <h1>Users List ({{usersCount}})</h1>
+            </div>
         </header>
 
         <ul>
@@ -10,6 +14,8 @@
             {{> user}}
             {{/each}}
         </ul>
-        <button class="loadmore-btn" {{hasMoreUsers}}>Load more tasks</button>
+        <div class="loadmore-btn-wrapper">
+            <button class="loadmore-btn" {{hasMoreTasks}}>Load more users</button>
+        </div>
     </div>
 </template>

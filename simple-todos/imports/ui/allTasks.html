@@ -1,21 +1,25 @@
 <template name="allTasks">
     <div class="container">
         <header>
-            <a href="{{pathFor route='/users'}}">Users List</a>
-            <h1>Todo List ({{incompleteCount}})</h1>
+            <div class="header-router">
+                <a href="{{pathFor route='/users'}}">Users list</a>
+            </div>
+            <div class="header-filling">
+                <h1>Todo List ({{incompleteCount}})</h1>
 
-            <label class="hide-completed">
-                <input type="checkbox" />
-                Hide Completed Tasks
-            </label>
+                <label class="hide-completed">
+                    <input type="checkbox" />
+                    Hide Completed Tasks
+                </label>
 
-            {{> loginButtons}}
+                {{> loginButtons}}
 
-            {{#if currentUser}}
-            <form class="new-task">
-                <input type="text" name="text" placeholder="Type to add new tasks" />
-            </form>
-            {{/if}}
+                {{#if currentUser}}
+                <form class="new-task">
+                    <input type="text" name="text" placeholder="Type to add new tasks" />
+                </form>
+                {{/if}}
+            </div>
         </header>
 
         <ul>
@@ -23,8 +27,9 @@
             {{> task}}
             {{/each}}
         </ul>
-
-        <button class="loadmore-btn" {{hasMoreTasks}}>Load more tasks</button>
+        <div class="loadmore-btn-wrapper">
+            <button class="loadmore-btn" {{hasMoreTasks}}>Load more tasks</button>
+        </div>
 
     </div>
 </template>
